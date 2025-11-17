@@ -20,8 +20,14 @@ const userSchema = new mongoose.Schema({
       "Please enter a valid email address",
     ],
   },
-});
+  password: {
+    trype: String,
+    required: [true, "User Password is required"],
+    trim: true,
+    minLength: 6,
+  },
+},{timestamps:true});
 
-const User = mongoose.model("User",userSchema)
+const User = mongoose.model("User", userSchema);
 
-export default User
+export default User;
