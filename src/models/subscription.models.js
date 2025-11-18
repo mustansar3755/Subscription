@@ -6,8 +6,8 @@ const subscriptionSchema = new mongoose.Schema(
       type: String,
       required: [true, "Subscription Name is required"],
       minLength: 2,
-      trim: true,
       maxLength: 100,
+      trim: true,
     },
     price: {
       type: Number,
@@ -21,7 +21,7 @@ const subscriptionSchema = new mongoose.Schema(
     },
     frequency: {
       type: String,
-      enum: ["daily", "weeekly", "monthly", "years"],
+      enum: ["daily", "weeekly", "monthly", "yearly"],
     },
     category: {
       type: String,
@@ -79,6 +79,11 @@ subscriptionSchema.pre("save", function (next) {
     this.renewalDate.setDate(
       this.renewalDate.getDate() + renewalPeriod[this.frequency]
     );
+  }
+
+  // Auto-update the status if renewal date has passed
+  if (this.renewalDate < new Date()) {
+    this.status = "experied";
   }
 });
 
